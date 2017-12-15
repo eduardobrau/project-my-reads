@@ -3,6 +3,7 @@ import React from 'react';
 class ListBooks extends React.Component{
 
   render(){
+    console.log('Props', this.props);
     return(
       <div className="list-books-content">
         <div>
