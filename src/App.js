@@ -1,5 +1,6 @@
-import React from 'react'
-// import * as BooksAPI from './BooksAPI'
+import React from 'react';
+// import * as BooksAPI from './BooksAPI';
+import Header from './ui/Header';
 import './App.css'
 
 class BooksApp extends React.Component {
@@ -39,9 +40,7 @@ class BooksApp extends React.Component {
           </div>
         ) : (
           <div className="list-books">
-            <div className="list-books-title">
-              <h1>MyReads</h1>
-            </div>
+            <Header title="MyReads"/>
             <div className="list-books-content">
               <div>
                 <div className="bookshelf">
