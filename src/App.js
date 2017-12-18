@@ -62,6 +62,12 @@ class BooksApp extends React.Component {
       },
     ]
 
+    const booksShelf = [
+      { shelf: 'currentlyReading', books },
+      { shelf: 'wantToRead', books},
+      { shelf: 'read', books}
+    ]
+
     return (
       <div className="app">
         {this.state.showSearchPage ? (
@@ -88,7 +94,15 @@ class BooksApp extends React.Component {
         ) : (
           <div className="list-books">
             <Header title="MyReads"/>
-            <ListBooks books={books}/>
+            {
+              booksShelf.map( (shelf,index) => (
+                <ListBooks 
+                  key={index}
+                  shelf={shelf.shelf}
+                  books={shelf.books}
+                />
+              ))
+            }
             <div className="open-search">
               <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
             </div>
