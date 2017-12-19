@@ -6,7 +6,7 @@ class ListBooks extends React.Component{
 
     //console.log(this.props);
     // Feito o destructuring do objeto para simplicidade de manipulação
-    const {shelf} = this.props;
+    const {shelf,updateBookShelf} = this.props;
     //console.log(shelf);
     const booksShelf = shelf.books.filter((book) => 
       book.shelf === shelf.shelf
@@ -29,7 +29,7 @@ class ListBooks extends React.Component{
                       <div className="book-top">
                         <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: ` url( ${book.image} ) ` }}></div>
                         <div className="book-shelf-changer">
-                          <select value={book.shelf}>
+                          <select value={book.shelf} onChange={updateBookShelf}>
                             <option value="none" disabled>Move to...</option>
                             <option value="currentlyReading">Currently Reading</option>
                             <option value="wantToRead">Want to Read</option>

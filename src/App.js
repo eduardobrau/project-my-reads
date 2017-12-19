@@ -12,13 +12,9 @@ class BooksApp extends React.Component {
      * users can use the browser's back and forward buttons to navigate between
      * pages, as well as provide a good URL they can bookmark and share.
      */
-    showSearchPage: false
-    
-  }
+    showSearchPage: false,
 
-  render() {
-
-    const books = [ 
+    books: [ 
       {
         id: 1,
         title: 'To Kill a Mockingbird',
@@ -70,10 +66,23 @@ class BooksApp extends React.Component {
       },
     ]
     
+  }
+
+  /* Atualiza o estado da propriedade books inicializada
+  junto ao componente de classe, para isso passo como
+  parametro o estado atual do componente */
+  updateBookShelf = () => {
+    console.log('Atualizando...');
+  }
+
+  render() {
+
+    const {books} = this.state;
+
     const booksShelf = [
-      { desc: 'Currently Reading', shelf: 'currentlyReading', books },
-      { desc: 'Want To Read', shelf: 'wantToRead', books},
-      { desc: 'Read', shelf: 'read', books}  
+      { desc: 'Currently Reading', shelf: 'currentlyReading', books:books },
+      { desc: 'Want To Read', shelf: 'wantToRead', books:books},
+      { desc: 'Read', shelf: 'read', books:books}  
     ]
 
     return (
@@ -107,6 +116,7 @@ class BooksApp extends React.Component {
                 <ListBooks 
                   key={index}
                   shelf={bookShelf}
+                  updateBookShelf={() => this.updateBookShelf()}
                 />
               ))
             }
