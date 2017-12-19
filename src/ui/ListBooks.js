@@ -6,19 +6,19 @@ class ListBooks extends React.Component{
 
     //console.log(this.props);
     // Feito o destructuring do objeto para simplicidade de manipulação
-    const {shelf, books} = this.props;
-    //console.log(books);
-    const booksShelf = books.filter((book) => (
-      book.category === shelf
-    ));
-    console.log (booksShelf);
+    const {shelf} = this.props;
+    //console.log(shelf);
+    const booksShelf = shelf.books.filter((book) => 
+      book.shelf === shelf.shelf
+    );
+    //console.log(booksShelf);
     return(
       <div className="list-books-content">
         <div>
         
           <div className="bookshelf">
             <h2 className="bookshelf-title">{
-              shelf
+              shelf.desc
               }
             </h2>
             <div className="bookshelf-books">
@@ -29,7 +29,7 @@ class ListBooks extends React.Component{
                       <div className="book-top">
                         <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: ` url( ${book.image} ) ` }}></div>
                         <div className="book-shelf-changer">
-                          <select>
+                          <select value={book.shelf}>
                             <option value="none" disabled>Move to...</option>
                             <option value="currentlyReading">Currently Reading</option>
                             <option value="wantToRead">Want to Read</option>
