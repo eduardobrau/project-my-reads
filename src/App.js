@@ -71,8 +71,23 @@ class BooksApp extends React.Component {
   /* Atualiza o estado da propriedade books inicializada
   junto ao componente de classe, para isso passo como
   parametro o estado atual do componente */
-  updateBookShelf = () => {
-    console.log('Atualizando...');
+  updateBookShelf = (target, book) => {
+    console.log(book);
+    // Feito destructuring
+    let {books} = this.state;
+  /* Filtra todos os livros setado no estado deste componente
+  que seja diferente do livro selecionado pelo usuário,
+  atualizando somente a propriedade shelf do book para o novo 
+  valor selecionado pelo usuário, concatenando esse objeto
+  atualizado com o retorno do filtro usado em books. */
+    books = books.filter(
+      b => b.id !== book.id
+    ).concat({
+      ...book,
+      shelf: target.value
+    });
+  // Seta o novo estado books
+    this.setState({books})
   }
 
   render() {
@@ -116,7 +131,9 @@ class BooksApp extends React.Component {
                 <ListBooks 
                   key={index}
                   shelf={bookShelf}
-                  updateBookShelf={() => this.updateBookShelf()}
+                  updateBookShelf={
+                    (target, book) => this.updateBookShelf(target,book)
+                  }
                 />
               ))
             }
