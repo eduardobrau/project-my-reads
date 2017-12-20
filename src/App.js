@@ -1,5 +1,5 @@
 import React from 'react';
-// import * as BooksAPI from './BooksAPI';
+import * as BooksAPI from './apis/BooksAPI';
 import Header from './ui/Header';
 import ListBooks from './ui/ListBooks';
 import './App.css'
@@ -16,6 +16,13 @@ class BooksApp extends React.Component {
 
     books:[]
     
+  }
+
+  componentDidMount(){
+    BooksAPI.getAll().then((books) => {
+      console.log(books);
+      this.setState({books});
+    })
   }
 
   /* Atualiza o estado da propriedade books inicializada
@@ -37,7 +44,10 @@ class BooksApp extends React.Component {
       shelf: target.value
     });
   // Seta o novo estado books
-    this.setState({books})
+    this.setState({books});
+  /* Atualiza a prateleira do livro no DB via API, com isso ao 
+  renderizar a página novamente os dados permanecerão fixo */ 
+    BooksAPI.update(book, target.value);
   }
 
   render() {

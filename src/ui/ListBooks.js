@@ -27,7 +27,7 @@ class ListBooks extends React.Component{
                   <li key={book.id}>
                     <div className="book">
                       <div className="book-top">
-                        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: ` url( ${book.image} ) ` }}></div>
+                        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: ` url( ${book.imageLinks.thumbnail} ) ` }}></div>
                         <div className="book-shelf-changer">
                           <select value={book.shelf} onChange={(event) => updateBookShelf(event.target, book)}>
                             <option value="none" disabled>Move to...</option>
@@ -39,7 +39,7 @@ class ListBooks extends React.Component{
                         </div>
                       </div>
                       <div className="book-title">{book.title}</div>
-                      <div className="book-authors">{book.author}e</div>
+                      <div className="book-authors">{book.authors}</div>
                     </div>
                   </li>
                 ))}
