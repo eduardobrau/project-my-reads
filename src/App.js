@@ -21,13 +21,6 @@ class BooksApp extends React.Component {
     
   }
 
-  updateSearchPage = () => {
-    const condition = this.state.showSearchPage;
-    this.setState(
-      {showSearchPage:(condition) ? false : true}
-    );
-  }
-
   componentDidMount(){
     BooksAPI.getAll().then((books) => {
       console.log(books);
@@ -72,13 +65,10 @@ class BooksApp extends React.Component {
 
     return (
       <div className="app">
-        <Route path="/search" render={() =>(
-          <Search updateSearchPage={
-            () => this.updateSearchPage()
-            } 
-          />
-        )}/>
-        <Route path="/" render={() =>(
+        
+        <Route path="/search" component={Search}/>
+        
+        <Route exact path="/" render={() =>(
           <div className="list-books">
             <Header title="MyReads"/>
             {
