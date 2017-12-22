@@ -18,12 +18,11 @@ class BooksApp extends React.Component {
     //showSearchPage: false,
 
     books:[]
-    
+
   }
 
   componentDidMount(){
     BooksAPI.getAll().then((books) => {
-      console.log(books);
       this.setState({books});
     })
   }
@@ -32,7 +31,6 @@ class BooksApp extends React.Component {
   junto ao componente de classe, para isso passo como
   parametro o estado atual do componente */
   updateBookShelf = (target, book) => {
-    console.log(book);
     // Feito destructuring
     let {books} = this.state;
   /* Filtra todos os livros setado no estado deste componente

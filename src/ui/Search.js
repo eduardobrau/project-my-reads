@@ -1,19 +1,42 @@
 import React from 'react';
-import {Link} from 'react-router-dom'
+import {Link} from 'react-router-dom';
+import { search } from '../apis/BooksAPI';
 
 class Search extends React.Component{
 
   state ={
-    query: ''
+    query: '',
+    searches:[]
+  }
+
+  searchBooks(query){
+    search(query).then((books) => {
+      this.searches = this.state.searches;
+      this.setState({searches:books})
+    })
   }
 
   updateQuery = (query) => {
     this.setState({ query:query.trim() })
   }
-
+  
   render(){
-    console.log(this.props);
+    //console.log(this.props);
     const {books, updateBookShelf} = this.props;
+    const {query} = this.state;
+    // Filtra os livros a serem exibidos
+    let showingBooks
+    // Caso o usuário digite algo será alterado o state do
+    // componente e está condição será executada
+    if (query.length > 2) {
+      this.searchBooks(query)
+      showingBooks = this.state.searches.filter((search) => 
+        search.title !== books.title
+      );
+    } else {
+      showingBooks = books;
+    }
+
     return(
       <div className="search-books">
         <div className="search-books-bar">
@@ -35,13 +58,13 @@ class Search extends React.Component{
               value={this.state.query}
               onChange={(e) => this.updateQuery(e.target.value)}
             />
-            {/* {JSON.stringify(this.state)} */}
+            {/* JSON.stringify(this.state) */}
           </div>
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {books.map((book) =>(
-              <li key={book.id}>
+            {showingBooks.map((book,index) =>(
+              <li key={index}>
                 <div className="book">
                   <div className="book-top">
                     <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: ` url( ${book.imageLinks.thumbnail} ) ` }}></div>
