@@ -1,42 +1,54 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import { search } from '../apis/BooksAPI';
+import escapeRegExp from 'escape-string-regexp';
+import sortBy from 'sort-by';
 
 class Search extends React.Component{
 
   state ={
     query: '',
-    searches:[]
+    searches:[],
+    textError: false,
   }
 
-  searchBooks(query){
-    search(query).then((books) => {
-      this.searches = this.state.searches;
-      this.setState({searches:books})
-    })
+  searchBooks = (query) => {
+    if(query.length >= 1){
+      search(query).then((books) => {
+        if(books.error){ 
+          this.setState({
+            textError:'Nada encontrado!',
+            searches:[],
+          })
+        }else{
+          
+          const prateleira = this.state.searches.map((s) =>{
+            const prateleiras = this.props.books.find( (b) => 
+              b.id === s.id
+            );
+            return prateleiras ? {...s, shelf:prateleiras.shelf} : {...s, shelf:'none'};
+          });
+          console.log(prateleira)
+          this.setState({
+            searches:prateleira,
+            textError:false
+          });      
+        }
+      }).catch(e => this.setState({
+        textError:`Error: ${e}`,
+        searches: [],
+      })); 
+    }
   }
 
   updateQuery = (query) => {
-    this.setState({ query:query.trim() })
+    this.setState({ query:query.trim() });
+    this.searchBooks(query.trim());
   }
   
   render(){
-    //console.log(this.props);
     const {books, updateBookShelf} = this.props;
-    const {query} = this.state;
-    // Filtra os livros a serem exibidos
-    let showingBooks
-    // Caso o usuário digite algo será alterado o state do
-    // componente e está condição será executada
-    if (query.length > 2) {
-      this.searchBooks(query)
-      showingBooks = this.state.searches.filter((search) => 
-        search.title !== books.title
-      );
-    } else {
-      showingBooks = books;
-    }
-
+    const {query,searches} = this.state;
     return(
       <div className="search-books">
         <div className="search-books-bar">
@@ -55,15 +67,18 @@ class Search extends React.Component{
             <input 
               type="text" 
               placeholder="Search by title or author"
-              value={this.state.query}
+              value={query}
               onChange={(e) => this.updateQuery(e.target.value)}
             />
             {/* JSON.stringify(this.state) */}
           </div>
         </div>
         <div className="search-books-results">
+          
+          <h2 id="errorSearch">{this.state.textError}</h2>
+          
           <ol className="books-grid">
-            {showingBooks.map((book,index) =>(
+            {searches.map((book,index) =>( 
               <li key={index}>
                 <div className="book">
                   <div className="book-top">
@@ -82,7 +97,8 @@ class Search extends React.Component{
                   <div className="book-authors">{book.authors}</div>
                 </div>
               </li>
-            ))}
+              )
+            )}
           </ol>
         </div>
       </div>
