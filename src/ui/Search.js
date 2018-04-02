@@ -14,23 +14,23 @@ class Search extends React.Component{
 
   searchBooks = (query) => {
     if(query.length >= 1){
-      search(query).then((books) => {
-        if(books.error){ 
+      search(query).then((searchBooks) => {
+        if(searchBooks.error){ 
           this.setState({
             textError:'Nada encontrado!',
             searches:[],
           })
         }else{
           
-          const prateleira = this.state.searches.map((s) =>{
-            const prateleiras = this.props.books.find( (b) => 
+          const booksWithShelf = searchBooks.map((s) =>{
+            const found = this.props.books.find( (b) => 
               b.id === s.id
             );
-            return prateleiras ? {...s, shelf:prateleiras.shelf} : {...s, shelf:'none'};
+            s.shelf = found ? found.shelf : 'none';
+            return s;
           });
-          console.log(prateleira)
           this.setState({
-            searches:prateleira,
+            searches:booksWithShelf,
             textError:false
           });      
         }
