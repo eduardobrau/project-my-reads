@@ -1,13 +1,11 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import { search } from '../apis/BooksAPI';
-import escapeRegExp from 'escape-string-regexp';
-import sortBy from 'sort-by';
+import { DebounceInput } from 'react-debounce-input';
 
 class Search extends React.Component{
 
   state ={
-    query: '',
     searches:[],
     textError: false,
   }
@@ -21,7 +19,6 @@ class Search extends React.Component{
             searches:[],
           })
         }else{
-          
           const booksWithShelf = searchBooks.map((s) =>{
             const found = this.props.books.find( (b) => 
               b.id === s.id
@@ -38,17 +35,14 @@ class Search extends React.Component{
         textError:`Error: ${e}`,
         searches: [],
       })); 
+    }else{
+      this.setState({searches:[]})
     }
-  }
-
-  updateQuery = (query) => {
-    this.setState({ query:query.trim() });
-    this.searchBooks(query.trim());
   }
   
   render(){
     const {books, updateBookShelf} = this.props;
-    const {query,searches} = this.state;
+    const {searches} = this.state;
     return(
       <div className="search-books">
         <div className="search-books-bar">
@@ -64,11 +58,10 @@ class Search extends React.Component{
               However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
               you don't find a specific author or title. Every search is limited by search terms.
             */}
-            <input 
-              type="text" 
+            <DebounceInput
               placeholder="Search by title or author"
-              value={query}
-              onChange={(e) => this.updateQuery(e.target.value)}
+              debounceTimeout={200}
+              onChange={(e) => this.searchBooks(e.target.value)}
             />
             {/* JSON.stringify(this.state) */}
           </div>
@@ -82,7 +75,7 @@ class Search extends React.Component{
               <li key={index}>
                 <div className="book">
                   <div className="book-top">
-                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: ` url( ${book.imageLinks.thumbnail} ) ` }}></div>
+                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: ` url( ${book.imageLinks && book.imageLinks.thumbnail})`}}></div>
                     <div className="book-shelf-changer">
                       <select value={book.shelf} onChange={(event) => updateBookShelf(event.target, book)}>
                         <option value="none" disabled>Move to...</option>
